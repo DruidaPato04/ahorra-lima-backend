@@ -19,7 +19,7 @@ Plaza Vea, Wong, Metro y Tottus (Vivanda es un caso aparte, ver más abajo).
 
 - Cuenta gratuita en [supabase.com](https://supabase.com) (o cualquier Postgres — el código usa el cliente de Supabase por simplicidad, pero es Postgres estándar)
 - Cuenta de GitHub (para correr el cron gratis con GitHub Actions)
-- Node.js 18+
+- Node.js 22+ (versiones anteriores fallan: `@supabase/supabase-js` necesita WebSocket nativo, que Node solo trae desde la 22)
 
 ## 2. Base de datos
 
