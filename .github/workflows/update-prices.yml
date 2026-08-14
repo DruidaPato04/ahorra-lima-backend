@@ -4,7 +4,12 @@ on:
   schedule:
     # 08:15 hora de Lima (UTC-5) = 13:15 UTC. Ajusta si quieres otra hora.
     - cron: "15 13 * * *"
-  workflow_dispatch: {} # permite correrlo manualmente desde la pestaña Actions
+  workflow_dispatch:
+    inputs:
+      test_limit:
+        description: "Solo probar con los primeros N productos (vacío = todos los 193)"
+        required: false
+        default: ""
 
 jobs:
   update-prices:
@@ -29,4 +34,5 @@ jobs:
           SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.SUPABASE_SERVICE_ROLE_KEY }}
           SCRAPER_USER_AGENT: ${{ vars.SCRAPER_USER_AGENT || 'AhorraLimaBot/0.1' }}
           REQUEST_DELAY_MS: "1200"
+          TEST_LIMIT: ${{ inputs.test_limit }}
         run: npm run update-prices

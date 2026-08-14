@@ -50,9 +50,17 @@ async function main() {
   const startedAt = Date.now();
   const summary = Object.fromEntries(ADAPTERS.map((a) => [a.id, { ok: 0, noMatch: 0, error: 0 }]));
 
-  console.log(`Ahorra Lima — actualización de precios · ${CATALOG.length} productos × ${ADAPTERS.length} cadenas`);
+  // TEST_LIMIT: para probar rápido con pocos productos en vez de esperar
+  // la corrida completa. No se usa en el cron diario normal.
+  const limit = Number(process.env.TEST_LIMIT || 0);
+  const catalog = limit > 0 ? CATALOG.slice(0, limit) : CATALOG;
 
-  for (const product of CATALOG) {
+  console.log(
+    `Ahorra Lima — actualización de precios · ${catalog.length} productos × ${ADAPTERS.length} cadenas` +
+      (limit > 0 ? ` (modo prueba, TEST_LIMIT=${limit})` : "")
+  );
+
+  for (const product of catalog) {
     const brandId = await ensureBrand(product.brand);
     const categoryId = await ensureCategory(product.category);
     await upsertProduct(product, brandId, categoryId);
