@@ -1,0 +1,19 @@
+{
+  "name": "ahorra-lima-backend",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "Actualizador diario de precios reales para Ahorra Lima (Plaza Vea, Wong, Metro, Tottus, Vivanda).",
+  "scripts": {
+    "update-prices": "node src/run.js",
+    "test-adapters": "node src/test-adapters.js"
+  },
+  "dependencies": {
+    "@supabase/supabase-js": "^2.45.4",
+    "dotenv": "^16.4.5",
+    "playwright": "^1.47.2"
+  },
+  "engines": {
+    "node": ">=18"
+  }
+}
