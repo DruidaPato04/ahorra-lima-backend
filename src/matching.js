@@ -54,10 +54,29 @@ function tokenSetScore(tokensA, tokensB) {
   return hits / tokensA.length;
 }
 
-// Extrae algo como "1 l", "620 ml", "750g" del texto para comparar tamaños.
+// Extrae el tamaño de un texto y lo normaliza a una unidad comparable:
+// kg/l se convierten a g/ml (misma escala, "volume-or-mass"), y un/unidad
+// quedan aparte como "count". Así "1 L" y "1000 ml" se reconocen como el
+// mismo tamaño en vez de compararse como texto literal distinto.
 function extractSize(str) {
-  const m = normalize(str).match(/(\d+(?:\.\d+)?)\s*(kg|g|l|ml|un|und|unidad|unidades)\b/);
-  return m ? `${m[1]}${m[2]}` : null;
+  const s = normalize(str);
+  const m = s.match(/(\d+(?:\.\d+)?)\s*(kg|g|l|ml|un|und|unidad|unidades)\b/);
+  if (m) {
+    let value = parseFloat(m[1]);
+    const unit = m[2];
+    if (unit === "un" || unit === "und" || unit === "unidad" || unit === "unidades") {
+      return { value, type: "count" };
+    }
+    if (unit === "kg" || unit === "l") value *= 1000;
+    return { value, type: "volume-or-mass" };
+  }
+  const packMatch = s.match(/(?:pack\s*x?|paquete\s*x?|x)\s*(\d+)\b/);
+  if (packMatch) return { value: parseFloat(packMatch[1]), type: "count" };
+  return null;
+}
+
+function looksLikePack(text) {
+  return /\bpack\b|\bpaquete\b/.test(normalize(text));
 }
 
 /**
@@ -76,6 +95,7 @@ export function matchProduct(canonical, candidates) {
 
   const canonTokens = tokenize(`${canonical.brand} ${canonical.name}`);
   const canonSize = extractSize(canonical.presentation);
+  const canonIsPack = looksLikePack(canonical.presentation) || (canonical.qty > 1 && canonical.unit === "unidad");
 
   let best = null;
   for (const c of candidates) {
@@ -85,13 +105,20 @@ export function matchProduct(canonical, candidates) {
     // Bono si coincide marca exacta
     if (c.brand && normalize(c.brand) === normalize(canonical.brand)) score += 0.15;
 
-    // Bono/penalización por tamaño: si ambos declaran tamaño y coincide, sube;
-    // si ambos lo declaran y NO coincide, es probablemente otra presentación del mismo
-    // producto (ej. 1L vs 500ml) — penaliza fuerte para no confundir precios.
+    // Bono/penalización por tamaño: mismo tipo (ambos "L/kg/g/ml" o ambos
+    // "unidades") y valor parecido (±15%) sube el puntaje; mismo tipo pero
+    // valor muy distinto (ej. 1L vs 170g, o 620ml vs 8 latas) es casi
+    // seguro un producto o presentación distinta — penaliza fuerte.
     const candSize = extractSize(c.name);
-    if (canonSize && candSize) {
-      score += canonSize === candSize ? 0.15 : -0.35;
+    if (canonSize && candSize && canonSize.type === candSize.type) {
+      const ratio = candSize.value / canonSize.value;
+      score += ratio >= 0.85 && ratio <= 1.15 ? 0.15 : -0.6;
     }
+
+    // Un producto individual (canónico) que hace match con un candidato que
+    // claramente es un pack/paquete (o viceversa) probablemente no es el
+    // mismo ítem, aunque compartan casi todas las palabras.
+    if (canonIsPack !== looksLikePack(c.name)) score -= 0.5;
 
     score = Math.max(0, Math.min(1, score));
     if (!best || score > best.score) best = { candidate: c, score };

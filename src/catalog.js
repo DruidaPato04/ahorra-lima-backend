@@ -3,12 +3,8 @@
 // de referencias populares para que el MVP real tenga cobertura útil desde
 // el día uno. Sin precios — los precios reales los llena el actualizador
 // diario a partir de aquí.
-//
-// searchTerms: qué texto se le manda al buscador de cada tienda para encontrar
-// este producto. Se prueban en orden hasta obtener un match de confianza suficiente.
 
 export const CATALOG = [
-  // Lácteos
   p("leche-gloria-entera-1l", "Leche Gloria Entera", "Gloria", "Lácteos", "1 L", 1, "L", ["Leche Gloria Entera 1L", "leche entera gloria"]),
   p("leche-gloria-light-1l", "Leche Gloria Light", "Gloria", "Lácteos", "1 L", 1, "L", ["Leche Gloria Light 1L"]),
   p("leche-gloria-deslactosada-1l", "Leche Gloria Sin Lactosa", "Gloria", "Lácteos", "1 L", 1, "L", ["Leche Gloria Deslactosada", "leche sin lactosa gloria"]),
@@ -29,8 +25,6 @@ export const CATALOG = [
   p("queso-mozzarella-bonle-250g", "Queso Mozzarella Bonlé", "Bonlé", "Lácteos", "250 g", 0.25, "kg", ["Queso Mozzarella Bonlé"]),
   p("yogurt-laive-fresa-1l", "Yogurt Laive Fresa", "Laive", "Lácteos", "1 L", 1, "unidad", ["Yogurt Laive Fresa"]),
   p("crema-leche-gloria-200ml", "Crema de Leche Gloria", "Gloria", "Lácteos", "200 ml", 0.2, "L", ["Crema de Leche Gloria"]),
-
-  // Bebidas
   p("coca-cola-zero-1.5l", "Coca-Cola Zero", "Coca-Cola", "Bebidas", "1.5 L", 1.5, "L", ["Coca Cola Zero 1.5L", "gaseosa coca cola zero"]),
   p("coca-cola-zero-500ml", "Coca-Cola Zero", "Coca-Cola", "Bebidas", "500 ml", 500, "ml", ["Coca Cola Zero 500ml"]),
   p("coca-cola-original-1.5l", "Coca-Cola Original", "Coca-Cola", "Bebidas", "1.5 L", 1.5, "L", ["Coca Cola 1.5L"]),
@@ -48,8 +42,6 @@ export const CATALOG = [
   p("jugo-frugos-naranja-1l", "Jugo Frugos Naranja", "Frugos", "Bebidas", "1 L", 1, "L", ["Frugos Naranja"]),
   p("nectar-gloria-durazno-1l", "Néctar Gloria Durazno", "Gloria", "Bebidas", "1 L", 1, "L", ["Néctar Gloria Durazno"]),
   p("cafe-nescafe-tradicion-170g", "Café Nescafé Tradición", "Nescafé", "Bebidas", "170 g", 0.17, "kg", ["Café Nescafé"]),
-
-  // Cervezas
   p("cerveza-pilsen-callao-620ml", "Cerveza Pilsen Callao", "Pilsen Callao", "Cervezas", "Botella 620 ml", 0.62, "L", ["Cerveza Pilsen Callao 620ml"]),
   p("pack-cerveza-cristal-355ml-x6", "Pack Cerveza Cristal", "Cristal", "Cervezas", "Pack 6 x 355 ml", 2.13, "L", ["Cerveza Cristal six pack"]),
   p("cerveza-cusquena-dorada-620ml", "Cerveza Cusqueña Dorada", "Cusqueña", "Cervezas", "Botella 620 ml", 0.62, "L", ["Cerveza Cusqueña Dorada 620ml"]),
@@ -60,8 +52,6 @@ export const CATALOG = [
   p("cerveza-stella-artois-355ml", "Cerveza Stella Artois", "Stella Artois", "Cervezas", "Botella 355 ml", 0.355, "L", ["Cerveza Stella Artois"]),
   p("cerveza-barena-620ml", "Cerveza Barena", "Barena", "Cervezas", "Botella 620 ml", 0.62, "L", ["Cerveza Barena"]),
   p("pack-cerveza-pilsen-355ml-x6", "Pack Cerveza Pilsen Callao", "Pilsen Callao", "Cervezas", "Pack 6 x 355 ml", 2.13, "L", ["Cerveza Pilsen six pack"]),
-
-  // Licores
   p("pisco-quebranta-ocucaje-700ml", "Pisco Quebranta Ocucaje", "Ocucaje", "Licores", "700 ml", 0.7, "L", ["Pisco Ocucaje Quebranta"]),
   p("ron-cartavio-anejo-750ml", "Ron Cartavio Añejo", "Cartavio", "Licores", "750 ml", 0.75, "L", ["Ron Cartavio Añejo"]),
   p("whisky-johnnie-walker-red-750ml", "Whisky Johnnie Walker Red Label", "Johnnie Walker", "Licores", "750 ml", 0.75, "L", ["Whisky Johnnie Walker Red Label"]),
@@ -71,8 +61,6 @@ export const CATALOG = [
   p("ron-flor-de-cana-750ml", "Ron Flor de Caña", "Flor de Caña", "Licores", "750 ml", 0.75, "L", ["Ron Flor de Caña"]),
   p("vino-tacama-blanco-750ml", "Vino Tacama Blanco", "Tacama", "Licores", "750 ml", 0.75, "L", ["Vino Tacama Blanco"]),
   p("vino-espumante-tabernero-750ml", "Vino Espumante Tabernero", "Tabernero", "Licores", "750 ml", 0.75, "L", ["Espumante Tabernero", "champagne"]),
-
-  // Frutas y Verduras
   p("palta-fuerte-kg", "Palta Fuerte", "Selección", "Frutas y Verduras", "Por Kg", 1, "kg", ["Palta Fuerte"]),
   p("platano-seda-kg", "Plátano de Seda", "Selección", "Frutas y Verduras", "Por Kg", 1, "kg", ["Plátano de Seda"]),
   p("manzana-israel-kg", "Manzana Israel", "Selección", "Frutas y Verduras", "Por Kg", 1, "kg", ["Manzana Israel"]),
@@ -93,8 +81,6 @@ export const CATALOG = [
   p("yuca-kg", "Yuca", "Selección", "Frutas y Verduras", "Por Kg", 1, "kg", ["Yuca"]),
   p("choclo-kg", "Choclo", "Selección", "Frutas y Verduras", "Por Kg", 1, "kg", ["Choclo"]),
   p("aji-amarillo-kg", "Ají Amarillo", "Selección", "Frutas y Verduras", "Por Kg", 1, "kg", ["Ají Amarillo"]),
-
-  // Carnes y Pescados
   p("pollo-entero-san-fernando-kg", "Pollo Entero San Fernando", "San Fernando", "Carnes y Pescados", "Por Kg", 1, "kg", ["Pollo Entero San Fernando"]),
   p("pechuga-pollo-san-fernando-kg", "Pechuga de Pollo San Fernando", "San Fernando", "Carnes y Pescados", "Por Kg", 1, "kg", ["Pechuga de Pollo San Fernando"]),
   p("trozos-pollo-redondos-san-fernando-kg", "Trozos de Pollo Redondos", "San Fernando", "Carnes y Pescados", "Por Kg", 1, "kg", ["Trozos de Pollo San Fernando"]),
@@ -111,8 +97,6 @@ export const CATALOG = [
   p("pota-kg", "Pota", "Pesquero", "Carnes y Pescados", "Por Kg", 1, "kg", ["Pota"]),
   p("langostinos-kg", "Langostinos", "Pesquero", "Carnes y Pescados", "Por Kg", 1, "kg", ["Langostinos"]),
   p("chorizo-parrillero-kg", "Chorizo Parrillero", "San Fernando", "Carnes y Pescados", "Por Kg", 1, "kg", ["Chorizo Parrillero"]),
-
-  // Saludable
   p("avena-quaker-tradicional-400g", "Avena Quaker Tradicional", "Quaker", "Saludable", "400 g", 0.4, "kg", ["Avena Quaker Tradicional"]),
   p("quinua-organica-500g", "Quinua Orgánica", "Sol de Andes", "Saludable", "500 g", 0.5, "kg", ["Quinua Orgánica 500g"]),
   p("leche-almendras-silk-1l", "Leche de Almendras Silk", "Silk", "Saludable", "1 L", 1, "L", ["Leche de Almendras Silk"]),
@@ -126,8 +110,6 @@ export const CATALOG = [
   p("leche-avena-silk-1l", "Leche de Avena Silk", "Silk", "Saludable", "1 L", 1, "L", ["Leche de Avena"]),
   p("barritas-proteina-quaker-x5", "Barritas Proteína Quaker", "Quaker", "Saludable", "Pack 5 unid", 5, "unidad", ["Barritas de Proteína"]),
   p("edulcorante-splenda-200tab", "Edulcorante Splenda", "Splenda", "Saludable", "200 tabletas", 200, "unidad", ["Edulcorante Splenda"]),
-
-  // Panadería
   p("pan-molde-bimbo-integral-650g", "Pan de Molde Bimbo Integral", "Bimbo", "Panadería", "650 g", 0.65, "kg", ["Pan de Molde Bimbo Integral"]),
   p("pan-frances-x10", "Pan Francés", "Panadería", "Panadería", "Pack x10", 10, "unidad", ["Pan Francés"]),
   p("croissant-mantequilla-x4", "Croissant Mantequilla", "Panadería", "Panadería", "Pack x4", 4, "unidad", ["Croissant Mantequilla"]),
@@ -139,8 +121,6 @@ export const CATALOG = [
   p("queque-tres-leches-porcion", "Queque Tres Leches", "Panadería", "Panadería", "Porción", 1, "unidad", ["Queque Tres Leches"]),
   p("alfajores-maicena-x6", "Alfajores de Maicena", "Panadería", "Panadería", "Pack x6", 6, "unidad", ["Alfajores de Maicena"]),
   p("pan-integral-artesanal-500g", "Pan Integral Artesanal", "Panadería", "Panadería", "500 g", 0.5, "kg", ["Pan Integral Artesanal"]),
-
-  // Market Asiático
   p("salsa-soya-kikkoman-150ml", "Salsa de Soya Kikkoman", "Kikkoman", "Market Asiático", "150 ml", 0.15, "L", ["Salsa de Soya Kikkoman"]),
   p("sillao-naruto-500ml", "Sillao Naruto", "Naruto", "Market Asiático", "500 ml", 0.5, "L", ["Sillao Naruto"]),
   p("fideos-chinos-saltado-250g", "Fideos Chinos para Saltado", "Yakisoba", "Market Asiático", "250 g", 0.25, "kg", ["Fideos Chinos para Saltado", "fideos tallarin saltado"]),
@@ -152,8 +132,6 @@ export const CATALOG = [
   p("fideos-udon-250g", "Fideos Udon", "Genérico", "Market Asiático", "250 g", 0.25, "kg", ["Fideos Udon"]),
   p("pasta-miso-250g", "Pasta de Miso", "Genérico", "Market Asiático", "250 g", 0.25, "kg", ["Pasta de Miso"]),
   p("vinagre-arroz-300ml", "Vinagre de Arroz", "Genérico", "Market Asiático", "300 ml", 0.3, "L", ["Vinagre de Arroz"]),
-
-  // Abarrotes
   p("arroz-costeno-extra-750g", "Arroz Costeño Extra", "Costeño", "Abarrotes", "750 g", 0.75, "kg", ["Arroz Costeño Extra 750g"]),
   p("arroz-paisana-750g", "Arroz Paisana", "Paisana", "Abarrotes", "750 g", 0.75, "kg", ["Arroz Paisana 750g"]),
   p("huevos-rojos-san-fernando-x30", "Huevos Rojos San Fernando", "San Fernando", "Abarrotes", "Panal x30", 30, "unidad", ["Huevos Rojos San Fernando panal x30"]),
@@ -180,8 +158,6 @@ export const CATALOG = [
   p("chocolate-sublime-x6", "Chocolate Sublime", "Sublime", "Abarrotes", "Pack x6", 6, "unidad", ["Chocolate Sublime"]),
   p("cocoa-winters-500g", "Cocoa Winter's", "Winter's", "Abarrotes", "500 g", 0.5, "kg", ["Cocoa Winters"]),
   p("gelatina-negrita-x4", "Gelatina Negrita", "Negrita", "Abarrotes", "Pack x4", 4, "unidad", ["Gelatina Negrita"]),
-
-  // Farmacia
   p("paracetamol-500mg-x10", "Paracetamol 500 mg", "Genérico", "Farmacia", "Caja x10", 10, "unidad", ["Paracetamol 500mg caja x10"]),
   p("alcohol-gel-purell-250ml", "Alcohol en Gel Purell", "Purell", "Farmacia", "250 ml", 0.25, "L", ["Alcohol en Gel Purell"]),
   p("curitas-nexcare-x20", "Curitas Nexcare", "Nexcare", "Farmacia", "Caja x20", 20, "unidad", ["Curitas Nexcare caja x20"]),
@@ -197,8 +173,6 @@ export const CATALOG = [
   p("jabon-dove-x3", "Jabón Dove", "Dove", "Farmacia", "Pack x3", 3, "unidad", ["Jabón Dove"]),
   p("pasta-dental-colgate-90g", "Pasta Dental Colgate", "Colgate", "Farmacia", "90 g", 0.09, "kg", ["Pasta Dental Colgate"]),
   p("desodorante-rexona-150ml", "Desodorante Rexona", "Rexona", "Farmacia", "150 ml", 0.15, "L", ["Desodorante Rexona"]),
-
-  // Cuidado del hogar
   p("papel-elite-doble-hoja-x4", "Papel Higiénico Elite Doble Hoja", "Elite", "Cuidado del hogar", "Pack x4", 4, "unidad", ["Papel Higiénico Elite Doble Hoja x4"]),
   p("papel-elite-suave-x8", "Papel Higiénico Elite Suave", "Elite", "Cuidado del hogar", "Pack x8", 8, "unidad", ["Papel Higiénico Elite Suave x8"]),
   p("papel-noble-x4", "Papel Higiénico Noble", "Noble", "Cuidado del hogar", "Pack x4", 4, "unidad", ["Papel Higiénico Noble x4"]),
@@ -212,21 +186,19 @@ export const CATALOG = [
   p("papel-toalla-scott-x2", "Papel Toalla Scott", "Scott", "Cuidado del hogar", "Pack x2", 2, "unidad", ["Papel Toalla Scott"]),
   p("servilletas-elite-x100", "Servilletas Elite", "Elite", "Cuidado del hogar", "Pack x100", 100, "unidad", ["Servilletas Elite"]),
   p("ambientador-glade-360ml", "Ambientador Glade", "Glade", "Cuidado del hogar", "360 ml", 0.36, "L", ["Ambientador Glade"]),
-
-  // Premium y Gourmet
   p("aceite-oliva-borges-500ml", "Aceite de Oliva Extra Virgen Borges", "Borges", "Premium y Gourmet", "500 ml", 0.5, "L", ["Aceite de Oliva Borges Extra Virgen"]),
   p("queso-parmesano-reggianito-200g", "Queso Parmesano Reggianito", "Importado", "Premium y Gourmet", "200 g", 0.2, "kg", ["Queso Parmesano Reggianito"]),
   p("jamon-serrano-importado-100g", "Jamón Serrano Importado", "Importado", "Premium y Gourmet", "100 g", 0.1, "kg", ["Jamón Serrano"]),
   p("chocolate-lindt-100g", "Chocolate Lindt Excellence 70%", "Lindt", "Premium y Gourmet", "100 g", 0.1, "kg", ["Chocolate Lindt Excellence"]),
   p("cafe-altomayo-grano-250g", "Café Gourmet en Grano Altomayo", "Altomayo", "Premium y Gourmet", "250 g", 0.25, "kg", ["Café Altomayo en grano"]),
   p("salmon-ahumado-noruego-150g", "Salmón Ahumado Noruego", "Importado", "Premium y Gourmet", "150 g", 0.15, "kg", ["Salmón Ahumado"]),
-];
   p("mermelada-gourmet-fresa-280g", "Mermelada Gourmet de Fresa", "Wong Selección", "Premium y Gourmet", "280 g", 0.28, "kg", ["Mermelada Gourmet"]),
   p("pasta-barilla-500g", "Pasta Barilla", "Barilla", "Premium y Gourmet", "500 g", 0.5, "kg", ["Pasta Barilla"]),
   p("aceite-oliva-carbonell-500ml", "Aceite de Oliva Carbonell", "Carbonell", "Premium y Gourmet", "500 ml", 0.5, "L", ["Aceite Oliva Carbonell"]),
   p("te-gourmet-hierbaluisa-25", "Té Gourmet Hierba Luisa", "McCollins", "Premium y Gourmet", "Caja x25", 25, "unidad", ["Té Hierba Luisa"]),
   p("galletas-danesas-mantequilla-400g", "Galletas Danesas de Mantequilla", "Royal Dansk", "Premium y Gourmet", "400 g", 0.4, "kg", ["Galletas Danesas"]),
   p("chocolate-ferrero-rocher-x8", "Chocolate Ferrero Rocher", "Ferrero", "Premium y Gourmet", "Caja x8", 8, "unidad", ["Ferrero Rocher"]),
+];
 
 function p(id, name, brand, category, presentation, qty, unit, extraSearchTerms) {
   return {

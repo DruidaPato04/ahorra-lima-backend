@@ -10,6 +10,10 @@ import wong from "./adapters/wong.js";
 import metro from "./adapters/metro.js";
 import tottus from "./adapters/tottus.js";
 
+process.on("unhandledRejection", (err) => {
+  console.error("Aviso: promesa rechazada sin capturar (se ignora y se continúa):", err?.message || err);
+});
+
 const ADAPTERS = [plazavea, wong, metro, tottus];
 const sampleIds = ["leche-gloria-entera-1l", "coca-cola-zero-1.5l", "cerveza-pilsen-callao-620ml", "pollo-entero-san-fernando-kg"];
 

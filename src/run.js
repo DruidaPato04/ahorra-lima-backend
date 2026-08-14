@@ -19,6 +19,14 @@ const DELAY_MS = Number(process.env.REQUEST_DELAY_MS || 1200);
 
 const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
 
+// Red de seguridad: un rechazo de promesa que se nos escape de algún
+// adaptador (encontramos uno real: Playwright fallando al lanzar el
+// navegador) no debe tumbar la corrida completa de 193 productos por
+// culpa de un solo producto de una sola cadena.
+process.on("unhandledRejection", (err) => {
+  console.error("Aviso: promesa rechazada sin capturar (se ignora y se continúa):", err?.message || err);
+});
+
 async function resolveOneChain(adapter, product) {
   for (const term of product.searchTerms) {
     let candidates;
@@ -66,12 +74,20 @@ async function main() {
     await upsertProduct(product, brandId, categoryId);
 
     for (const adapter of ADAPTERS) {
-      const result = await resolveOneChain(adapter, product);
-      await saveResult(product.id, adapter.id, result);
+      try {
+        const result = await resolveOneChain(adapter, product);
+        await saveResult(product.id, adapter.id, result);
 
-      if (result.matched) summary[adapter.id].ok++;
-      else if (result.error?.startsWith(adapter.name)) summary[adapter.id].error++;
-      else summary[adapter.id].noMatch++;
+        if (result.matched) summary[adapter.id].ok++;
+        else if (result.error?.startsWith(adapter.name)) summary[adapter.id].error++;
+        else summary[adapter.id].noMatch++;
+      } catch (err) {
+        // Nunca debería llegar hasta acá (resolveOneChain ya atrapa los
+        // errores del adaptador), pero por si acaso: un fallo inesperado
+        // en un producto/cadena no debe cortar el resto de la corrida.
+        console.error(`  Error inesperado en ${adapter.name} / ${product.id}:`, err?.message || err);
+        summary[adapter.id].error++;
+      }
 
       if (adapter.automated) await sleep(DELAY_MS);
     }

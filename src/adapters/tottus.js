@@ -70,7 +70,15 @@ async function extractFromDomHeuristic(page) {
 
 let browserPromise = null;
 function getBrowser() {
-  if (!browserPromise) browserPromise = chromium.launch({ headless: true });
+  if (!browserPromise) {
+    // Si el lanzamiento falla, se limpia el caché para que el próximo
+    // producto pueda reintentar en vez de quedar con una promesa
+    // rechazada para siempre (eso fue lo que causó el crash del proceso).
+    browserPromise = chromium.launch({ headless: true }).catch((err) => {
+      browserPromise = null;
+      throw err;
+    });
+  }
   return browserPromise;
 }
 
