@@ -21,9 +21,11 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: 20
-          cache: npm
+          # Sin "cache: npm": eso necesita un package-lock.json ya generado,
+          # y como nadie corrió "npm install" todavía (ni tu Mac ni este
+          # entorno tienen Node.js instalado), ese archivo no existe aún.
 
-      - run: npm ci
+      - run: npm install
 
       - name: Instalar Chromium para Playwright (necesario para Tottus)
         run: npx playwright install --with-deps chromium
