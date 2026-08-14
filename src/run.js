@@ -11,10 +11,15 @@ import { ensureBrand, ensureCategory, upsertProduct, saveResult } from "./db.js"
 import plazavea from "./adapters/plazavea.js";
 import wong from "./adapters/wong.js";
 import metro from "./adapters/metro.js";
-import tottus from "./adapters/tottus.js";
 import vivanda from "./adapters/vivanda.js";
 
-const ADAPTERS = [plazavea, wong, metro, tottus, vivanda];
+// Tottus queda fuera del cron diario a propósito ("fase 2"): la corrida real
+// del 193/193 dio 0 encontrados y 0 errores — el adaptador nunca lanza el
+// navegador con problemas, simplemente no logra extraer productos de la
+// página. No aporta datos hoy, solo consume ~10 min de la corrida diaria.
+// El archivo src/adapters/tottus.js queda intacto para retomarlo cuando se
+// invierta tiempo en inspeccionar su página real y arreglar los selectores.
+const ADAPTERS = [plazavea, wong, metro, vivanda];
 const DELAY_MS = Number(process.env.REQUEST_DELAY_MS || 1200);
 
 const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
@@ -31,7 +36,7 @@ async function resolveOneChain(adapter, product) {
   for (const term of product.searchTerms) {
     let candidates;
     try {
-      candidates = await adapter.search(term, 5, product.id);
+      candidates = await adapter.search(term, 10, product.id);
     } catch (err) {
       return { matched: false, error: `${adapter.name}: ${err.message}` };
     }
@@ -92,8 +97,6 @@ async function main() {
       if (adapter.automated) await sleep(DELAY_MS);
     }
   }
-
-  if (typeof tottus.close === "function") await tottus.close();
 
   const seconds = ((Date.now() - startedAt) / 1000).toFixed(1);
   console.log(`\nListo en ${seconds}s.\n`);

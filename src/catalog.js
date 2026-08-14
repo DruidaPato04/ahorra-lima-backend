@@ -17,7 +17,7 @@ export const CATALOG = [
   p("yogurt-griego-gloria-light-150g", "Yogurt Griego Gloria Light", "Gloria", "Lácteos", "150 g", 1, "unidad", ["Yogurt Griego Gloria Light"]),
   p("leche-ideal-entera-1l", "Leche Ideal Entera", "Ideal", "Lácteos", "1 L", 1, "L", ["Leche Ideal Entera 1L"]),
   p("leche-bella-holandesa-1l", "Leche Bella Holandesa Entera", "Bella Holandesa", "Lácteos", "1 L", 1, "L", ["Leche Bella Holandesa"]),
-  p("manjar-blanco-gloria-320g", "Manjarblanco Gloria", "Gloria", "Lácteos", "320 g", 0.32, "kg", ["Manjar blanco Gloria"]),
+  p("manjar-blanco-gloria-320g", "Manjar Blanco Gloria", "Gloria", "Lácteos", "320 g", 0.32, "kg", ["Manjarblanco Gloria"]),
   p("mantequilla-gloria-200g", "Mantequilla Gloria con Sal", "Gloria", "Lácteos", "200 g", 0.2, "kg", ["Mantequilla Gloria"]),
   p("mantequilla-laive-200g", "Mantequilla Laive", "Laive", "Lácteos", "200 g", 0.2, "kg", ["Mantequilla Laive"]),
   p("queso-fresco-paisano-400g", "Queso Fresco Paisano", "Laive", "Lácteos", "400 g", 0.4, "kg", ["Queso Fresco Paisano"]),

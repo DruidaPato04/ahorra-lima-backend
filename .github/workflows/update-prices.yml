@@ -14,7 +14,7 @@ on:
 jobs:
   update-prices:
     runs-on: ubuntu-latest
-    timeout-minutes: 75 # con 193 productos x 4 cadenas automatizadas, la corrida completa puede tomar 40-60 min
+    timeout-minutes: 60 # Plaza Vea + Wong + Metro + Vivanda (sin Tottus, ver src/run.js) — la corrida con 5 cadenas tomó 46 min reales, con 4 debería bajar, pero dejamos margen
     steps:
       - uses: actions/checkout@v4
 
@@ -24,9 +24,6 @@ jobs:
           cache: npm
 
       - run: npm ci
-
-      - name: Instalar Chromium para Playwright (necesario para Tottus)
-        run: npx playwright install --with-deps chromium
 
       - name: Correr actualizador
         env:

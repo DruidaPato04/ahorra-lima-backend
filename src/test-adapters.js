@@ -23,7 +23,7 @@ async function run() {
     console.log(`\n=== ${product.name} (${product.presentation}) ===`);
     for (const adapter of ADAPTERS) {
       try {
-        const candidates = await adapter.search(product.searchTerms[0], 5, product.id);
+        const candidates = await adapter.search(product.searchTerms[0], 10, product.id);
         const match = matchProduct(product, candidates);
         if (match) {
           const pct = discountPercent(match.candidate.price, match.candidate.listPrice);

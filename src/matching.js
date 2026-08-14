@@ -79,6 +79,42 @@ function looksLikePack(text) {
   return /\bpack\b|\bpaquete\b/.test(normalize(text));
 }
 
+// Puntúa cada candidato contra el producto canónico. Se usa tanto para el
+// match real como para diagnóstico (ver src/diagnose-matching.js).
+export function scoreCandidates(canonical, candidates) {
+  const canonTokens = tokenize(`${canonical.brand} ${canonical.name}`);
+  const canonSize = extractSize(canonical.presentation);
+  const canonIsPack = looksLikePack(canonical.presentation) || (canonical.qty > 1 && canonical.unit === "unidad");
+
+  return candidates.map((c) => {
+    const candTokens = tokenize(`${c.brand || ""} ${c.name}`);
+    let score = tokenSetScore(canonTokens, candTokens);
+    const parts = { tokenScore: score };
+
+    if (c.brand && normalize(c.brand) === normalize(canonical.brand)) {
+      score += 0.15;
+      parts.brandBonus = 0.15;
+    }
+
+    const candSize = extractSize(c.name);
+    if (canonSize && candSize && canonSize.type === candSize.type) {
+      const ratio = candSize.value / canonSize.value;
+      const delta = ratio >= 0.85 && ratio <= 1.15 ? 0.15 : -0.6;
+      score += delta;
+      parts.sizeAdjust = delta;
+      parts.canonSize = canonSize;
+      parts.candSize = candSize;
+    }
+
+    if (canonIsPack !== looksLikePack(c.name)) {
+      score -= 0.5;
+      parts.packMismatch = -0.5;
+    }
+
+    return { candidate: c, score: Math.max(0, Math.min(1, score)), parts };
+  });
+}
+
 /**
  * @param {object} canonical  producto de nuestro catálogo (name, brand, presentation, ean)
  * @param {Array<{name:string, brand?:string, ean?:string}>} candidates  resultados de la tienda
@@ -93,36 +129,8 @@ export function matchProduct(canonical, candidates) {
     if (exact) return { candidate: exact, score: 1 };
   }
 
-  const canonTokens = tokenize(`${canonical.brand} ${canonical.name}`);
-  const canonSize = extractSize(canonical.presentation);
-  const canonIsPack = looksLikePack(canonical.presentation) || (canonical.qty > 1 && canonical.unit === "unidad");
-
-  let best = null;
-  for (const c of candidates) {
-    const candTokens = tokenize(`${c.brand || ""} ${c.name}`);
-    let score = tokenSetScore(canonTokens, candTokens);
-
-    // Bono si coincide marca exacta
-    if (c.brand && normalize(c.brand) === normalize(canonical.brand)) score += 0.15;
-
-    // Bono/penalización por tamaño: mismo tipo (ambos "L/kg/g/ml" o ambos
-    // "unidades") y valor parecido (±15%) sube el puntaje; mismo tipo pero
-    // valor muy distinto (ej. 1L vs 170g, o 620ml vs 8 latas) es casi
-    // seguro un producto o presentación distinta — penaliza fuerte.
-    const candSize = extractSize(c.name);
-    if (canonSize && candSize && canonSize.type === candSize.type) {
-      const ratio = candSize.value / canonSize.value;
-      score += ratio >= 0.85 && ratio <= 1.15 ? 0.15 : -0.6;
-    }
-
-    // Un producto individual (canónico) que hace match con un candidato que
-    // claramente es un pack/paquete (o viceversa) probablemente no es el
-    // mismo ítem, aunque compartan casi todas las palabras.
-    if (canonIsPack !== looksLikePack(c.name)) score -= 0.5;
-
-    score = Math.max(0, Math.min(1, score));
-    if (!best || score > best.score) best = { candidate: c, score };
-  }
+  const scored = scoreCandidates(canonical, candidates);
+  const best = scored.reduce((a, b) => (!a || b.score > a.score ? b : a), null);
 
   if (!best || best.score < MATCH_THRESHOLD) return null;
   return best;
