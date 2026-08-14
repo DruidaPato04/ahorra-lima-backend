@@ -48,7 +48,13 @@ function tokenSetScore(tokensA, tokensB) {
       const d = levenshtein(ta, tb);
       if (d < best) best = d;
     }
-    const tol = ta.length <= 4 ? 1 : 2;
+    // Palabras muy cortas (<=4 letras) exigen coincidencia exacta: un solo
+    // cambio de letra ahí suele producir una palabra totalmente distinta
+    // ("oral" -> "coral" a distancia 1), y con nombres canónicos de 2-3
+    // palabras un solo acierto de casualidad ya cruza el umbral de match.
+    // Verificado en vivo: "Suero Oral" (rehidratación, ~S/3) hacía match
+    // con un "Suero Labial ... Baby Coral" (cosmético, S/219) por esto.
+    const tol = ta.length <= 4 ? 0 : 2;
     if (best <= tol) hits++;
   }
   return hits / tokensA.length;
