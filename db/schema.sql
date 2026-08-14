@@ -116,3 +116,47 @@ insert into supermarkets (id, name, base_url, color, automated, automation_note)
   ('tottus',   'Tottus',    'https://www.tottus.com.pe',     '#A6488B', true, 'Requiere navegador headless (Cloudflare). Más frágil que las VTEX.'),
   ('vivanda',  'Vivanda',   'https://www.vivanda.com.pe',    '#3B7DC4', false, 'robots.txt de Vivanda prohíbe expresamente /api/. No se automatiza; requiere carga manual o acuerdo con InRetail.')
 on conflict (id) do nothing;
+
+-- ============================================================
+-- Seguridad (Row Level Security)
+-- ============================================================
+-- El actualizador de precios usa la "service_role key" (solo en GitHub
+-- Actions, nunca en el navegador), que siempre puede leer y escribir sin
+-- importar estas reglas. Lo de abajo es lo que puede hacer cualquier
+-- visitante de la app, que solo tiene la llave pública ("anon").
+
+alter table brands enable row level security;
+alter table categories enable row level security;
+alter table supermarkets enable row level security;
+alter table stores enable row level security;
+alter table products enable row level security;
+alter table product_prices enable row level security;
+alter table price_history enable row level security;
+alter table users enable row level security;
+alter table shopping_lists enable row level security;
+alter table shopping_list_items enable row level security;
+alter table favorites enable row level security;
+
+-- Catálogo y precios: cualquiera puede LEER (la app los necesita para
+-- mostrar precios), nadie puede escribir con la llave pública.
+drop policy if exists "Lectura pública" on brands;
+create policy "Lectura pública" on brands for select using (true);
+drop policy if exists "Lectura pública" on categories;
+create policy "Lectura pública" on categories for select using (true);
+drop policy if exists "Lectura pública" on supermarkets;
+create policy "Lectura pública" on supermarkets for select using (true);
+drop policy if exists "Lectura pública" on stores;
+create policy "Lectura pública" on stores for select using (true);
+drop policy if exists "Lectura pública" on products;
+create policy "Lectura pública" on products for select using (true);
+drop policy if exists "Lectura pública" on product_prices;
+create policy "Lectura pública" on product_prices for select using (true);
+drop policy if exists "Lectura pública" on price_history;
+create policy "Lectura pública" on price_history for select using (true);
+
+-- users / shopping_lists / shopping_list_items / favorites: a propósito
+-- SIN ninguna política. Con RLS activado y cero políticas, la llave
+-- pública no puede ni leer ni escribir nada ahí. Hoy la app guarda listas
+-- y favoritos solo en el teléfono (localStorage), así que estas tablas no
+-- se usan todavía — quedan bloqueadas por completo hasta que exista un
+-- sistema de login real y sepamos exactamente qué política necesitan.
