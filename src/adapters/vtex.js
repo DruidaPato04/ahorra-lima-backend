@@ -4,6 +4,18 @@
 
 const USER_AGENT = process.env.SCRAPER_USER_AGENT || "AhorraLimaBot/0.1";
 
+async function rawSearch(baseUrl, name, query, limit) {
+  const url = `${baseUrl}/api/catalog_system/pub/products/search?ft=${encodeURIComponent(query)}&_from=0&_to=${limit - 1}`;
+  const res = await fetch(url, {
+    headers: { "User-Agent": USER_AGENT, Accept: "application/json" },
+  });
+  // VTEX responde 206 (Partial Content) en búsquedas normales — no es un error.
+  if (!res.ok && res.status !== 206) {
+    throw new Error(`${name}: VTEX search devolvió ${res.status}`);
+  }
+  return res.json();
+}
+
 export function makeVtexAdapter({ id, name, baseUrl, automated = true, automationNote = null }) {
   return {
     id,
@@ -12,15 +24,19 @@ export function makeVtexAdapter({ id, name, baseUrl, automated = true, automatio
     automated,
     automationNote,
     async search(query, limit = 5) {
-      const url = `${baseUrl}/api/catalog_system/pub/products/search?ft=${encodeURIComponent(query)}&_from=0&_to=${limit - 1}`;
-      const res = await fetch(url, {
-        headers: { "User-Agent": USER_AGENT, Accept: "application/json" },
-      });
-      // VTEX responde 206 (Partial Content) en búsquedas normales — no es un error.
-      if (!res.ok && res.status !== 206) {
-        throw new Error(`${name}: VTEX search devolvió ${res.status}`);
+      // La búsqueda de VTEX exige que TODAS las palabras aparezcan en el
+      // producto (funciona como "Y", no "O"): agregar una palabra de más
+      // que la tienda no usa (ej. "fresco", "Excellence") hace que
+      // devuelva 0 resultados aunque el producto exista con un nombre más
+      // simple. Verificado en vivo: "Kion Fresco" -> 0, "Kion" -> 5.
+      // Por eso, si la búsqueda completa no trae nada, se reintenta con
+      // menos palabras (de la más específica a la más genérica) antes de
+      // rendirse.
+      const words = query.trim().split(/\s+/);
+      let data = await rawSearch(baseUrl, name, query, limit);
+      for (let n = words.length - 1; data.length === 0 && n >= 1; n--) {
+        data = await rawSearch(baseUrl, name, words.slice(0, n).join(" "), limit);
       }
-      const data = await res.json();
       return data
         .map((prod) => {
           const item = prod.items && prod.items[0];

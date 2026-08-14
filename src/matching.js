@@ -79,12 +79,25 @@ function looksLikePack(text) {
   return /\bpack\b|\bpaquete\b/.test(normalize(text));
 }
 
+// "¿Es esto un pack/paquete de varias unidades?" — combina tres señales:
+// la palabra "pack"/"paquete" en el texto, datos estructurados (qty>1 y
+// unit="unidad" en nuestro catálogo), y el tamaño tipo "count" ya extraído
+// (ej. "8un", "x6"). Antes solo se usaba la palabra literal para los
+// candidatos de la tienda, y casi ninguna tienda peruana la escribe así
+// (dicen "8un" directo) — eso rechazaba matches correctos por error.
+function isPackLike(text, size, qty, unit) {
+  if (unit === "unidad" && qty > 1) return true;
+  if (looksLikePack(text)) return true;
+  if (size && size.type === "count" && size.value > 1) return true;
+  return false;
+}
+
 // Puntúa cada candidato contra el producto canónico. Se usa tanto para el
 // match real como para diagnóstico (ver src/diagnose-matching.js).
 export function scoreCandidates(canonical, candidates) {
   const canonTokens = tokenize(`${canonical.brand} ${canonical.name}`);
   const canonSize = extractSize(canonical.presentation);
-  const canonIsPack = looksLikePack(canonical.presentation) || (canonical.qty > 1 && canonical.unit === "unidad");
+  const canonIsPack = isPackLike(canonical.presentation, canonSize, canonical.qty, canonical.unit);
 
   return candidates.map((c) => {
     const candTokens = tokenize(`${c.brand || ""} ${c.name}`);
@@ -106,7 +119,7 @@ export function scoreCandidates(canonical, candidates) {
       parts.candSize = candSize;
     }
 
-    if (canonIsPack !== looksLikePack(c.name)) {
+    if (canonIsPack !== isPackLike(c.name, candSize, null, null)) {
       score -= 0.5;
       parts.packMismatch = -0.5;
     }
