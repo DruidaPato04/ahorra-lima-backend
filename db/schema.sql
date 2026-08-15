@@ -82,27 +82,43 @@ create table if not exists price_history (
 );
 create index if not exists idx_price_history_lookup on price_history(product_id, supermarket_id, recorded_at desc);
 
--- Entidades del lado de la app (no las toca el actualizador de precios, pero completan el modelo)
+-- Entidades del lado de la app (no las toca el actualizador de precios, pero completan el modelo).
+-- users.id es el MISMO id que genera Supabase Auth (auth.users.id) — no uno
+-- propio — así una fila acá siempre corresponde 1 a 1 con una sesión real.
+--
+-- MIGRACIÓN DE UNA SOLA VEZ: estas 4 tablas estaban vacías y sin usar hasta
+-- ahora (no existía login), así que se recrean limpias con la forma nueva.
+-- Los "drop table" de abajo NO son idempotentes a propósito — es la única
+-- vez que deben correr. Después de ejecutar este script una vez con el
+-- login ya activo, hay que borrar estas 4 líneas de drop antes de volver a
+-- correr schema.sql, o se perdería la cuenta de cualquier usuario real.
+drop table if exists favorites;
+drop table if exists shopping_list_items;
+drop table if exists shopping_lists;
+drop table if exists users;
+
 create table if not exists users (
-  id uuid primary key default gen_random_uuid(),
+  id uuid primary key references auth.users(id) on delete cascade,
+  email text,
   created_at timestamptz not null default now()
 );
 
 create table if not exists shopping_lists (
   id uuid primary key default gen_random_uuid(),
-  user_id uuid references users(id),
+  user_id uuid not null references users(id) on delete cascade,
   created_at timestamptz not null default now()
 );
 
 create table if not exists shopping_list_items (
   id uuid primary key default gen_random_uuid(),
-  shopping_list_id uuid not null references shopping_lists(id),
+  shopping_list_id uuid not null references shopping_lists(id) on delete cascade,
   product_id text not null references products(id),
-  qty integer not null default 1
+  qty integer not null default 1,
+  unique (shopping_list_id, product_id)
 );
 
 create table if not exists favorites (
-  user_id uuid not null references users(id),
+  user_id uuid not null references users(id) on delete cascade,
   product_id text not null references products(id),
   created_at timestamptz not null default now(),
   primary key (user_id, product_id)
@@ -154,9 +170,27 @@ create policy "Lectura pública" on product_prices for select using (true);
 drop policy if exists "Lectura pública" on price_history;
 create policy "Lectura pública" on price_history for select using (true);
 
--- users / shopping_lists / shopping_list_items / favorites: a propósito
--- SIN ninguna política. Con RLS activado y cero políticas, la llave
--- pública no puede ni leer ni escribir nada ahí. Hoy la app guarda listas
--- y favoritos solo en el teléfono (localStorage), así que estas tablas no
--- se usan todavía — quedan bloqueadas por completo hasta que exista un
--- sistema de login real y sepamos exactamente qué política necesitan.
+-- users / shopping_lists / shopping_list_items / favorites: cada quien
+-- puede leer y escribir SOLO lo suyo, identificado por auth.uid() (el id
+-- de la sesión, que Supabase valida a partir del token del usuario que
+-- inició sesión). Sin sesión iniciada, auth.uid() es null y estas tablas
+-- quedan completamente cerradas — igual que antes de tener login.
+drop policy if exists "Cada quien ve y edita su propio perfil" on users;
+create policy "Cada quien ve y edita su propio perfil" on users
+  for all using (auth.uid() = id) with check (auth.uid() = id);
+
+drop policy if exists "Cada quien ve y edita sus propias listas" on shopping_lists;
+create policy "Cada quien ve y edita sus propias listas" on shopping_lists
+  for all using (auth.uid() = user_id) with check (auth.uid() = user_id);
+
+drop policy if exists "Cada quien ve y edita items de sus propias listas" on shopping_list_items;
+create policy "Cada quien ve y edita items de sus propias listas" on shopping_list_items
+  for all using (
+    exists (select 1 from shopping_lists sl where sl.id = shopping_list_id and sl.user_id = auth.uid())
+  ) with check (
+    exists (select 1 from shopping_lists sl where sl.id = shopping_list_id and sl.user_id = auth.uid())
+  );
+
+drop policy if exists "Cada quien ve y edita sus propios favoritos" on favorites;
+create policy "Cada quien ve y edita sus propios favoritos" on favorites
+  for all using (auth.uid() = user_id) with check (auth.uid() = user_id);
