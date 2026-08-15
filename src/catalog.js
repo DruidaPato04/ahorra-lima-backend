@@ -158,6 +158,7 @@ export const CATALOG = [
   p("chocolate-sublime-x6", "Chocolate Sublime", "Sublime", "Abarrotes", "Pack x6", 6, "unidad", ["Chocolate Sublime"]),
   p("cocoa-winters-500g", "Cocoa Winter's", "Winter's", "Abarrotes", "500 g", 0.5, "kg", ["Cocoa Winters"]),
   p("gelatina-negrita-x4", "Gelatina Negrita", "Negrita", "Abarrotes", "Pack x4", 4, "unidad", ["Gelatina Negrita"]),
+  p("hielo-bolsa-2kg", "Hielo en Cubos", "Genérico", "Abarrotes", "Bolsa 2 kg", 2, "kg", ["Hielo en cubos bolsa 2kg", "bolsa de hielo"]),
   p("paracetamol-500mg-x10", "Paracetamol 500 mg", "Genérico", "Farmacia", "Caja x10", 10, "unidad", ["Paracetamol 500mg caja x10"]),
   p("alcohol-gel-purell-250ml", "Alcohol en Gel Purell", "Purell", "Farmacia", "250 ml", 0.25, "L", ["Alcohol en Gel Purell"]),
   p("curitas-nexcare-x20", "Curitas Nexcare", "Nexcare", "Farmacia", "Caja x20", 20, "unidad", ["Curitas Nexcare caja x20"]),
