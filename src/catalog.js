@@ -162,7 +162,7 @@ export const CATALOG = [
   p("chocolate-sublime-x6", "Chocolate Sublime", "Sublime", "Abarrotes", "Pack x6", 6, "unidad", ["Chocolate Sublime"]),
   p("cocoa-winters-500g", "Cocoa Winter's", "Winter's", "Abarrotes", "500 g", 0.5, "kg", ["Cocoa Winters"]),
   p("gelatina-negrita-x4", "Gelatina Negrita", "Negrita", "Abarrotes", "Pack x4", 4, "unidad", ["Gelatina Negrita"]),
-  p("hielo-bolsa-2kg", "Hielo en Cubos", "Genérico", "Abarrotes", "Bolsa 2 kg", 2, "kg", ["Hielo en cubos bolsa 2kg", "bolsa de hielo"]),
+  p("hielo-bolsa-2kg", "Hielo en Cubos", "Genérico", "Abarrotes", "Bolsa 2 kg", 2, "kg", ["Hielo en cubos bolsa 2kg"]),
   p("frijol-canario-nortenita-500g", "Frijol Canario Norteñita", "Norteñita", "Abarrotes", "Bolsa 500 g", 0.5, "kg", ["Frijol Canario Norteñita"]),
   p("lenteja-nortenita-500g", "Lenteja Norteñita", "Norteñita", "Abarrotes", "Bolsa 500 g", 0.5, "kg", ["Lenteja Norteñita"]),
   p("garbanzo-nortenita-500g", "Garbanzo Norteñita", "Norteñita", "Abarrotes", "Bolsa 500 g", 0.5, "kg", ["Garbanzo Norteñita"]),
