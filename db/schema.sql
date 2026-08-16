@@ -85,17 +85,9 @@ create index if not exists idx_price_history_lookup on price_history(product_id,
 -- Entidades del lado de la app (no las toca el actualizador de precios, pero completan el modelo).
 -- users.id es el MISMO id que genera Supabase Auth (auth.users.id) — no uno
 -- propio — así una fila acá siempre corresponde 1 a 1 con una sesión real.
---
--- MIGRACIÓN DE UNA SOLA VEZ: estas 4 tablas estaban vacías y sin usar hasta
--- ahora (no existía login), así que se recrean limpias con la forma nueva.
--- Los "drop table" de abajo NO son idempotentes a propósito — es la única
--- vez que deben correr. Después de ejecutar este script una vez con el
--- login ya activo, hay que borrar estas 4 líneas de drop antes de volver a
--- correr schema.sql, o se perdería la cuenta de cualquier usuario real.
-drop table if exists favorites;
-drop table if exists shopping_list_items;
-drop table if exists shopping_lists;
-drop table if exists users;
+-- (La migración de una sola vez que recreaba estas tablas ya se ejecutó —
+-- ver el historial de git si hace falta repetirla. Ya hay cuentas reales
+-- usando esto, así que de aquí en adelante todo es "if not exists".)
 
 create table if not exists users (
   id uuid primary key references auth.users(id) on delete cascade,
