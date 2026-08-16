@@ -30,7 +30,7 @@ export const CATALOG = [
   p("coca-cola-zero-500ml", "Coca-Cola Zero", "Coca-Cola", "Bebidas", "500 ml", 500, "ml", ["Coca Cola Zero 500ml"]),
   p("coca-cola-original-1.5l", "Coca-Cola Original", "Coca-Cola", "Bebidas", "1.5 L", 1.5, "L", ["Coca Cola 1.5L"]),
   p("inca-kola-1.5l", "Inca Kola", "Inca Kola", "Bebidas", "1.5 L", 1.5, "L", ["Inca Kola 1.5L"]),
-  p("agua-san-luis-sin-gas-625ml", "Agua San Luis Sin Gas", "San Luis", "Bebidas", "625 ml", 625, "ml", ["Agua San Luis sin gas"]),
+  p("agua-san-luis-sin-gas-1l", "Agua San Luis Sin Gas", "San Luis", "Bebidas", "Botella 1 L", 1, "L", ["Agua San Luis sin gas botella 1L"]),
   p("sprite-1.5l", "Sprite", "Sprite", "Bebidas", "1.5 L", 1.5, "L", ["Sprite 1.5L"]),
   p("fanta-1.5l", "Fanta", "Fanta", "Bebidas", "1.5 L", 1.5, "L", ["Fanta 1.5L"]),
   p("pepsi-1.5l", "Pepsi", "Pepsi", "Bebidas", "1.5 L", 1.5, "L", ["Pepsi 1.5L"]),
