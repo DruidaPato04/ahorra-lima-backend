@@ -82,6 +82,26 @@ create table if not exists price_history (
 );
 create index if not exists idx_price_history_lookup on price_history(product_id, supermarket_id, recorded_at desc);
 
+-- Analítica propia y anónima (no de terceros, no Google Analytics ni Meta
+-- Pixel). anon_id es un id al azar generado en el teléfono, guardado en
+-- localStorage, que NO se conecta con el nombre, correo ni nada personal
+-- — solo sirve para poder medir cosas como "cuánta gente vuelve la
+-- siguiente semana" sin identificar a nadie. Ver política de privacidad.
+create table if not exists usage_events (
+  id bigint generated always as identity primary key,
+  event_type text not null,
+  anon_id text not null,
+  created_at timestamptz not null default now()
+);
+create index if not exists idx_usage_events_type_time on usage_events(event_type, created_at);
+create index if not exists idx_usage_events_anon on usage_events(anon_id, created_at);
+alter table usage_events enable row level security;
+-- Cualquiera puede REGISTRAR un evento (para eso sirve), pero nadie puede
+-- leer los datos de otros con la llave pública — solo tú, desde el panel
+-- de Supabase, puedes consultarlos.
+drop policy if exists "Cualquiera puede registrar un evento" on usage_events;
+create policy "Cualquiera puede registrar un evento" on usage_events for insert with check (true);
+
 -- Entidades del lado de la app (no las toca el actualizador de precios, pero completan el modelo).
 -- users.id es el MISMO id que genera Supabase Auth (auth.users.id) — no uno
 -- propio — así una fila acá siempre corresponde 1 a 1 con una sesión real.
