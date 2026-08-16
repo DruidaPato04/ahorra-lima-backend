@@ -129,6 +129,7 @@ insert into supermarkets (id, name, base_url, color, automated, automation_note)
   ('plazavea', 'Plaza Vea', 'https://www.plazavea.com.pe', '#C9483A', true, null),
   ('wong',     'Wong',      'https://www.wong.pe',          '#2F8F52', true, null),
   ('metro',    'Metro',     'https://www.metro.pe',          '#D98A2B', true, null),
+  ('makro',    'Makro',     'https://www.makro.plazavea.com.pe', '#00529B', true, null),
   ('tottus',   'Tottus',    'https://www.tottus.com.pe',     '#A6488B', true, 'Requiere navegador headless (Cloudflare). Más frágil que las VTEX.'),
   ('vivanda',  'Vivanda',   'https://www.vivanda.com.pe',    '#3B7DC4', false, 'robots.txt de Vivanda prohíbe expresamente /api/. No se automatiza; requiere carga manual o acuerdo con InRetail.')
 on conflict (id) do nothing;

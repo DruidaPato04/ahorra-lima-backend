@@ -7,8 +7,9 @@ import { scoreCandidates } from "./matching.js";
 import plazavea from "./adapters/plazavea.js";
 import wong from "./adapters/wong.js";
 import metro from "./adapters/metro.js";
+import makro from "./adapters/makro.js";
 
-const ADAPTERS = [plazavea, wong, metro];
+const ADAPTERS = [plazavea, wong, metro, makro];
 const sampleSize = Number(process.argv[2] || 25);
 const sample = CATALOG.slice(0, sampleSize);
 

@@ -11,6 +11,7 @@ import { ensureBrand, ensureCategory, upsertProduct, saveResult } from "./db.js"
 import plazavea from "./adapters/plazavea.js";
 import wong from "./adapters/wong.js";
 import metro from "./adapters/metro.js";
+import makro from "./adapters/makro.js";
 import vivanda from "./adapters/vivanda.js";
 
 // Tottus queda fuera del cron diario a propósito ("fase 2"): la corrida real
@@ -19,7 +20,7 @@ import vivanda from "./adapters/vivanda.js";
 // página. No aporta datos hoy, solo consume ~10 min de la corrida diaria.
 // El archivo src/adapters/tottus.js queda intacto para retomarlo cuando se
 // invierta tiempo en inspeccionar su página real y arreglar los selectores.
-const ADAPTERS = [plazavea, wong, metro, vivanda];
+const ADAPTERS = [plazavea, wong, metro, makro, vivanda];
 const DELAY_MS = Number(process.env.REQUEST_DELAY_MS || 1200);
 
 const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
