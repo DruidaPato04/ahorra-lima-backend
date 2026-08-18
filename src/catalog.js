@@ -12,6 +12,7 @@ export const CATALOG = [
   p("pack-leche-gloria-1l-x6", "Pack Leche Gloria Entera", "Gloria", "Lácteos", "Pack 6 x 1 L", 6, "L", ["Leche Gloria Entera pack 6"]),
   p("leche-laive-entera-1l", "Leche Laive Entera", "Laive", "Lácteos", "1 L", 1, "L", ["Leche Laive Entera 1L"]),
   p("yogurt-gloria-fresa-1l", "Yogurt Gloria Fresa", "Gloria", "Lácteos", "1 L", 1, "unidad", ["Yogurt Gloria Fresa 1L"]),
+  p("yogurt-bebible-gloria-vainilla-946g", "Yogurt Bebible Gloria Vainilla", "Gloria", "Lácteos", "946 g", 946, "g", ["Yogurt Bebible Gloria Vainilla"]),
   p("yogurt-griego-gloria-150g", "Yogurt Griego Gloria", "Gloria", "Lácteos", "150 g", 1, "unidad", ["Yogurt Griego Gloria"]),
   p("pack-yogurt-griego-gloria-4x150g", "Pack Yogurt Griego Gloria", "Gloria", "Lácteos", "Pack 4 x 150 g", 4, "unidad", ["Yogurt Griego Gloria pack 4"]),
   p("yogurt-griego-gloria-light-150g", "Yogurt Griego Gloria Light", "Gloria", "Lácteos", "150 g", 1, "unidad", ["Yogurt Griego Gloria Light"]),
