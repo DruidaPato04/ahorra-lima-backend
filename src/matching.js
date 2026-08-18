@@ -101,7 +101,15 @@ function isPackLike(text, size, qty, unit) {
 // Puntúa cada candidato contra el producto canónico. Se usa tanto para el
 // match real como para diagnóstico (ver src/diagnose-matching.js).
 export function scoreCandidates(canonical, candidates) {
-  const canonTokens = tokenize(`${canonical.brand} ${canonical.name}`);
+  // Se dedupean para que la marca (repetida a propósito: una vez en
+  // "brand", y de nuevo porque casi siempre también aparece dentro de
+  // "name", ej. brand="Bella Holandesa" + name="Leche Bella Holandesa
+  // Entera") no cuente doble como coincidencia — si no, dos palabras de
+  // marca duplicadas ya cubren gran parte del token-set score sin que
+  // ninguna palabra que describe el producto en sí haya coincidido.
+  const canonTokens = [...new Set(tokenize(`${canonical.brand} ${canonical.name}`))];
+  const brandTokens = new Set(tokenize(canonical.brand || ""));
+  const canonDescriptorTokens = canonTokens.filter((t) => !brandTokens.has(t));
   const canonSize = extractSize(canonical.presentation);
   const canonIsPack = isPackLike(canonical.presentation, canonSize, canonical.qty, canonical.unit);
 
@@ -109,6 +117,17 @@ export function scoreCandidates(canonical, candidates) {
     const candTokens = tokenize(`${c.brand || ""} ${c.name}`);
     let score = tokenSetScore(canonTokens, candTokens);
     const parts = { tokenScore: score };
+    // Verificado en vivo: "Leche Bella Holandesa Entera" (1 L, leche
+    // líquida) matcheaba con "Condensada BELLA HOLANDESA Lata 1Kg" (leche
+    // condensada, producto totalmente distinto) con score 0.97 — las dos
+    // coincidencias venían solo de "bella"/"holandesa" (la marca), y ni
+    // "leche" ni "entera" (lo que de verdad describe el producto)
+    // coincidían con nada. El bono de marca + el de tamaño (ambos ~1000
+    // en la misma escala kg/L) alcanzaban igual el umbral. Si ninguna
+    // palabra fuera de la marca coincide, jamás debería pasar el umbral
+    // por más que marca y tamaño calcen — se limita el puntaje final más
+    // abajo, después de sumar esos bonos.
+    const noDescriptorMatch = canonDescriptorTokens.length > 0 && tokenSetScore(canonDescriptorTokens, candTokens) === 0;
 
     if (c.brand && normalize(c.brand) === normalize(canonical.brand)) {
       score += 0.15;
@@ -128,6 +147,11 @@ export function scoreCandidates(canonical, candidates) {
     if (canonIsPack !== isPackLike(c.name, candSize, null, null)) {
       score -= 0.5;
       parts.packMismatch = -0.5;
+    }
+
+    if (noDescriptorMatch) {
+      score = Math.min(score, 0.3);
+      parts.noDescriptorMatch = true;
     }
 
     return { candidate: c, score: Math.max(0, Math.min(1, score)), parts };
