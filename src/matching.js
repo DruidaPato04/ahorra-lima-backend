@@ -81,8 +81,16 @@ function extractSize(str) {
   return null;
 }
 
+// Verificado en vivo: Metro vende "Twelvepack Cerveza Cusqueña Trigo Botella
+// 620ml" (un pack de 12 botellas) pegado como una sola palabra, sin espacio
+// ni guión antes de "pack" — el \bpack\b original nunca lo detectaba como
+// pack (no hay borde de palabra entre "twelve" y "pack"), así que matcheaba
+// contra la botella individual de nuestro catálogo con 96.67% de confianza,
+// mostrando el precio del pack de 12 como si fuera el de una sola botella.
+const PACK_NUMBER_WORDS = "dos|tres|cuatro|cinco|seis|siete|ocho|nueve|diez|once|doce|two|three|four|five|six|seven|eight|nine|ten|eleven|twelve";
 function looksLikePack(text) {
-  return /\bpack\b|\bpaquete\b/.test(normalize(text));
+  const n = normalize(text);
+  return /\bpack\b|\bpaquete\b/.test(n) || new RegExp(`\\b(?:${PACK_NUMBER_WORDS})\\s*pack\\b`).test(n);
 }
 
 // "¿Es esto un pack/paquete de varias unidades?" — combina tres señales:
@@ -127,7 +135,15 @@ export function scoreCandidates(canonical, candidates) {
     // palabra fuera de la marca coincide, jamás debería pasar el umbral
     // por más que marca y tamaño calcen — se limita el puntaje final más
     // abajo, después de sumar esos bonos.
-    const noDescriptorMatch = canonDescriptorTokens.length > 0 && tokenSetScore(canonDescriptorTokens, candTokens) === 0;
+    //
+    // Verificado en vivo (caso "Twelvepack ... Trigo ..." vs "Cerveza
+    // Cusqueña Dorada"): exigir que UNA SOLA palabra descriptora coincida no
+    // basta cuando esa palabra es genérica ("cerveza"), porque dos sabores
+    // totalmente distintos (Dorada vs Trigo) igual comparten esa palabra y
+    // se cuela como si sí describieran el mismo producto. Se exige que
+    // coincida al menos la mitad de las palabras descriptoras, no solo una.
+    const descriptorScore = canonDescriptorTokens.length > 0 ? tokenSetScore(canonDescriptorTokens, candTokens) : 1;
+    const noDescriptorMatch = descriptorScore < 0.5;
 
     if (c.brand && normalize(c.brand) === normalize(canonical.brand)) {
       score += 0.15;
