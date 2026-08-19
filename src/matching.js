@@ -6,6 +6,14 @@
 
 const MATCH_THRESHOLD = 0.55;
 
+// Marcas de relleno que usamos en el catálogo cuando el producto no tiene
+// una marca comercial real que rastrear (frutas/verduras sueltas, pan de
+// panadería propia, ítems genéricos). Nunca deben activar el castigo por
+// marca distinta más abajo — ninguna tienda real va a devolver "Selección"
+// como marca, así que se penalizaría sistemáticamente TODO ese tipo de
+// producto por una marca que nunca existió de verdad.
+const PLACEHOLDER_BRANDS = new Set(["seleccion", "generico", "panaderia"]);
+
 export function normalize(str) {
   return (str || "")
     .toString()
@@ -145,9 +153,26 @@ export function scoreCandidates(canonical, candidates) {
     const descriptorScore = canonDescriptorTokens.length > 0 ? tokenSetScore(canonDescriptorTokens, candTokens) : 1;
     const noDescriptorMatch = descriptorScore < 0.5;
 
+    const candBrandTokens = tokenize(c.brand || "");
     if (c.brand && normalize(c.brand) === normalize(canonical.brand)) {
       score += 0.15;
       parts.brandBonus = 0.15;
+    } else if (
+      !PLACEHOLDER_BRANDS.has(normalize(canonical.brand || "")) &&
+      brandTokens.size > 0 &&
+      candBrandTokens.length > 0 &&
+      tokenSetScore([...brandTokens], candBrandTokens) === 0
+    ) {
+      // Verificado en vivo 2026-08-19: "Papel Aluminio Reynolds" matcheaba
+      // con "Papel Aluminio DARNEL" (score 0.667) porque antes solo existía
+      // un BONO por marca coincidente, nunca un castigo por marca distinta
+      // — a diferencia de packMismatch, que sí castiga. Mismo hueco causó
+      // café Kirma -> Jacobs/Bell's y ají Sibarita -> RICASA. Se castiga
+      // igual que packMismatch (-0.5) solo cuando NINGUNA palabra de la
+      // marca canónica aparece en la marca del candidato — así no afecta
+      // marcas con variaciones de formato (ej. "Alacena" vs "Alacena S.A.").
+      score -= 0.5;
+      parts.brandMismatch = -0.5;
     }
 
     const candSize = extractSize(c.name);
