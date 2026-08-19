@@ -214,6 +214,35 @@ export const CATALOG = [
   p("te-gourmet-hierbaluisa-25", "Té Gourmet Hierba Luisa", "McCollins", "Premium y Gourmet", "Caja x25", 25, "unidad", ["Té Hierba Luisa"]),
   p("galletas-danesas-mantequilla-400g", "Galletas Danesas de Mantequilla", "Royal Dansk", "Premium y Gourmet", "400 g", 0.4, "kg", ["Galletas Danesas"]),
   p("chocolate-ferrero-rocher-x8", "Chocolate Ferrero Rocher", "Ferrero", "Premium y Gourmet", "Caja x8", 8, "unidad", ["Ferrero Rocher"]),
+
+  // Agregados 2026-08-19: vacíos reales encontrados al revisar el catálogo
+  // completo — básicos de cocina peruana que no estaban (empezando por
+  // harina, reportada por Jesús).
+  p("harina-sin-preparar-blanca-flor-1kg", "Harina Sin Preparar Blanca Flor", "Blanca Flor", "Abarrotes", "1 Kg", 1, "kg", ["Harina Blanca Flor", "harina sin preparar", "harina de trigo"]),
+  p("harina-preparada-blanca-flor-1kg", "Harina Preparada Blanca Flor", "Blanca Flor", "Abarrotes", "1 Kg", 1, "kg", ["Harina Preparada Blanca Flor", "harina preparada"]),
+  p("maizena-fecula-maiz-500g", "Fécula de Maíz Maizena", "Maizena", "Abarrotes", "500 g", 0.5, "kg", ["Maizena", "fécula de maíz", "chuño"]),
+  p("levadura-fleischmanns-11g", "Levadura Fleischmann's", "Fleischmann's", "Abarrotes", "Sobre 11 g", 0.011, "kg", ["Levadura Fleischmann's", "levadura seca"]),
+  p("polvo-hornear-royal-113g", "Polvo de Hornear Royal", "Royal", "Abarrotes", "Lata 113 g", 0.113, "kg", ["Polvo de Hornear Royal", "royal"]),
+  p("pasta-tomate-alacena-200g", "Pasta de Tomate Alacena", "Alacena", "Abarrotes", "200 g", 0.2, "kg", ["Pasta de Tomate Alacena", "puré de tomate"]),
+  p("vinagre-blanco-alacena-500ml", "Vinagre Blanco Alacena", "Alacena", "Abarrotes", "500 ml", 0.5, "L", ["Vinagre Blanco Alacena", "vinagre blanco"]),
+  p("margarina-sello-oro-250g", "Margarina Sello de Oro", "Sello de Oro", "Abarrotes", "Pote 250 g", 0.25, "kg", ["Margarina Sello de Oro"]),
+  p("manteca-vegetal-sello-oro-500g", "Manteca Vegetal Sello de Oro", "Sello de Oro", "Abarrotes", "500 g", 0.5, "kg", ["Manteca Vegetal Sello de Oro", "manteca vegetal"]),
+  p("oregano-molido-sibarita-8g", "Orégano Molido Sibarita", "Sibarita", "Abarrotes", "Sobre 8 g", 0.008, "kg", ["Orégano Sibarita", "orégano molido"]),
+  p("comino-molido-sibarita-10g", "Comino Molido Sibarita", "Sibarita", "Abarrotes", "Sobre 10 g", 0.01, "kg", ["Comino Sibarita", "comino molido"]),
+  p("pimienta-molida-sibarita-10g", "Pimienta Molida Sibarita", "Sibarita", "Abarrotes", "Sobre 10 g", 0.01, "kg", ["Pimienta Sibarita", "pimienta negra molida"]),
+  p("canela-molida-sibarita-10g", "Canela Molida Sibarita", "Sibarita", "Abarrotes", "Sobre 10 g", 0.01, "kg", ["Canela Sibarita", "canela molida"]),
+  p("aji-panca-molido-sibarita-90g", "Ají Panca Molido Sibarita", "Sibarita", "Abarrotes", "Bolsa 90 g", 0.09, "kg", ["Ají Panca Sibarita", "ají panca molido"]),
+  p("aji-mirasol-molido-sibarita-90g", "Ají Mirasol Molido Sibarita", "Sibarita", "Abarrotes", "Bolsa 90 g", 0.09, "kg", ["Ají Mirasol Sibarita", "ají mirasol molido"]),
+  p("cebolla-blanca-kg", "Cebolla Blanca", "Selección", "Frutas y Verduras", "Por Kg", 1, "kg", ["Cebolla Blanca"]),
+  p("espinaca-atado", "Espinaca", "Selección", "Frutas y Verduras", "Atado", 1, "unidad", ["Espinaca", "espinaca atado"]),
+  p("apio-atado", "Apio", "Selección", "Frutas y Verduras", "Atado", 1, "unidad", ["Apio"]),
+  p("culantro-atado", "Culantro", "Selección", "Frutas y Verduras", "Atado", 1, "unidad", ["Culantro", "cilantro"]),
+  p("perejil-atado", "Perejil", "Selección", "Frutas y Verduras", "Atado", 1, "unidad", ["Perejil"]),
+  p("te-negro-mccollins-25", "Té Negro McCollins", "McCollins", "Bebidas", "Caja x25", 25, "unidad", ["Té Negro McCollins", "té mccollins"]),
+  p("cafe-kirma-100g", "Café Kirma", "Kirma", "Bebidas", "Frasco 100 g", 0.1, "kg", ["Café Kirma", "café instantáneo kirma"]),
+  p("papel-aluminio-reynolds-rollo", "Papel Aluminio Reynolds", "Reynolds", "Cuidado del hogar", "Rollo 7.5 m", 1, "unidad", ["Papel Aluminio Reynolds", "papel aluminio"]),
+  p("papel-film-vinifan-rollo", "Papel Film Vinifan", "Vinifan", "Cuidado del hogar", "Rollo 30 m", 1, "unidad", ["Papel Film Vinifan", "vinifan"]),
+  p("esponja-cocina-scotch-brite-x3", "Esponja de Cocina Scotch-Brite", "Scotch-Brite", "Cuidado del hogar", "Pack x3", 3, "unidad", ["Esponja Scotch-Brite", "esponja de cocina"]),
 ];
 
 function p(id, name, brand, category, presentation, qty, unit, extraSearchTerms) {
